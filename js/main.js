@@ -243,11 +243,11 @@ function placeEmblem(activeTurnPlayer, gridButtons, gridOutputs, row, column) {
 function checkWinner(row, column) {
     //console.log("check winner");
     console.log(board[row][column]);
-    if(board[row][column] == 1) {
+    if(winConditions[row][column] == 1) {
         p1_Score += 1;
         console.log(p1_Score);
     }
-    if(board[row][column] == 2) {
+    if(winConditions[row][column] == 2) {
         p2_Score += 1;
     }
     if(p1_Score == 3) {
