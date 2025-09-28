@@ -11,6 +11,7 @@
 //draw condition
 //click cell to place emblem
 //reset button resets the game state (or refreshes?)
+//---Created with assistance from a friend (walked me through the logic especially arrays and looping them)-----
 
 const grid = document.getElementById('gameGrid');
 
@@ -19,9 +20,6 @@ const playerTwoIndicator = document.getElementById('imageOutline2');
 
 let p1_Score;
 let p2_Score;
-
-// const sonicPlayer = document.getElementById('playerOne');
-// const shadowPlayer = document.getElementById('playerTwo');
 
 const startButton = document.getElementById('startButton');
 const resetButton = document.getElementById('resetButton');
@@ -56,28 +54,12 @@ const placeOutput9 = document.getElementById('gridOutput9');
 const gridButtons = [gridButt1, gridButt2, gridButt3, gridButt4, gridButt5, gridButt6, gridButt7, gridButt8, gridButt9];
 const gridOutputs = [placeOutput1, placeOutput2, placeOutput3, placeOutput4, placeOutput5, placeOutput6, placeOutput7, placeOutput8, placeOutput9];
 
-
-
-//const output = document.getElementById('gridOutput');
-
 let activeTurnPlayer;
 let gameStart = false;
-//let scoreValue = [0,1];
 
-// const playerOne = 0;
-// const playerTwo = 1;
-
-// const playerEmblem = [
-//     { playerOne: "sonic", src: "img/Sonic.png"},
-//     { playerTwo: "shadow", src: "img/Shadow.png"}
-// ];
-
-// const preloadImg = [];
-// playerEmblem.forEach(player => {
-//     const img = new Image();
-//     img.src = player.src;
-//     preloadImg.push({...player,img});
-// });
+document.getElementById('resetButton').addEventListener('click', () => {
+    window.location.reload();
+})
 
 //get Turn player and start game
 document.getElementById('startButton').addEventListener('click', () => {
@@ -122,21 +104,15 @@ let gridState = {
     rowThree : [gridButt7, gridButt8, gridButt9]
 };
 
-// let winStates = {
-//     Vert1 : [gridButt1, gridButt4, gridButt7],
-//     Vert2 : [gridButt2, gridButt5, gridButt8],
-//     Vert3 : [gridButt3, gridButt6, gridButt9],
-//     Hori1 : [gridButt1, gridButt2, gridButt3],
-//     Hori2 : [gridButt4, gridButt5, gridButt6],
-//     Hori3 : [gridButt7, gridButt8, gridButt9],
-//     Diag1 : [gridButt1, gridButt5, gridButt9],
-//     Diag2 : [gridButt3, gridButt5, gridButt7]
-// };
-
 let winConditions = [
-    [[0,0],[0,1],[0,2]],
-    [[1,0],[1,1],[1,2]],
-    [[2,0],[2,1],[2,2]]
+    [[0,0],[0,1],[0,2]], //Top Row, Horizontal
+    [[1,0],[1,1],[1,2]], //Middle Row Horizontal
+    [[2,0],[2,1],[2,2]], //Bottom Row Horizontal
+    [[0,0],[1,0],[2,0]], //First Column Vertical
+    [[0,1],[1,1],[2,1]], //Middle Column Vertical
+    [[0,2],[1,2],[2,2]], //Right Column Vertical
+    [[0,0],[1,1],[2,2]], //Diagonal Left to Right
+    [[0,2],[1,1],[2,0]]  //Diagonal Right to Left
 ]
 
 //2d array to setup the board
@@ -147,14 +123,12 @@ let board = [
 ];
 
 document.getElementById('gridButt1').addEventListener('click', () => {
-    //getActiveTurnPlayer(activeTurnPlayer);
     if(gameStart) {
         placeEmblem(activeTurnPlayer, gridButt1, placeOutput1, 0,0);
     }
 })
 
 document.getElementById('gridButt2').addEventListener('click', () => {
-    //getActiveTurnPlayer(activeTurnPlayer);
     if(gameStart) {
         placeEmblem(activeTurnPlayer, gridButt2, placeOutput2, 0,1);
     }
@@ -173,35 +147,30 @@ document.getElementById('gridButt4').addEventListener('click', () => {
 })
 
 document.getElementById('gridButt5').addEventListener('click', () => {
-    //getActiveTurnPlayer(activeTurnPlayer);
     if(gameStart) {
         placeEmblem(activeTurnPlayer, gridButt5, placeOutput5, 1,1);
     }
 })
 
 document.getElementById('gridButt6').addEventListener('click', () => {
-    //getActiveTurnPlayer(activeTurnPlayer);
     if(gameStart) {
         placeEmblem(activeTurnPlayer, gridButt6, placeOutput6, 1,2);
     }
 })
 
 document.getElementById('gridButt7').addEventListener('click', () => {
-    //getActiveTurnPlayer(activeTurnPlayer);
     if(gameStart) {
         placeEmblem(activeTurnPlayer, gridButt7, placeOutput7, 2,0);
     }
 })
 
 document.getElementById('gridButt8').addEventListener('click', () => {
-    //getActiveTurnPlayer(activeTurnPlayer);
     if(gameStart) {
         placeEmblem(activeTurnPlayer, gridButt8, placeOutput8, 2,1);
     }
 })
 
 document.getElementById('gridButt9').addEventListener('click', () => {
-    //getActiveTurnPlayer(activeTurnPlayer);
     if(gameStart) {
         placeEmblem(activeTurnPlayer, gridButt9, placeOutput9, 2,2);
     }
@@ -210,50 +179,55 @@ document.getElementById('gridButt9').addEventListener('click', () => {
 function placeEmblem(activeTurnPlayer, gridButtons, gridOutputs, row, column) {
     //Turn button off after clicking it
     gridButtons.style.visibility = 'hidden';
-    //console.log(activeTurnPlayer);
     if(activeTurnPlayer === 1) {
         let sonicEmblem = document.createElement('img');
         sonicEmblem.src = 'img/Sonicsmol.png';
         gridOutputs.appendChild(sonicEmblem);
         board[row][column] = activeTurnPlayer;
-        
-        //activeTurnPlayer = 1
-        console.log(board);
-        //getActiveTurnPlayer(1);
+       
         checkWinner(board[row][column]);
         switchActiveTurnPlayer();
-        //console.log(activeTurnPlayer);
     }
     if(activeTurnPlayer === 2) {
         let shadowEmblem = document.createElement('img');
         shadowEmblem.src = 'img/ShadowSmol.png';
+        
         gridOutputs.appendChild(shadowEmblem);
         board[row][column] = activeTurnPlayer;
-        //console.log(placement);
-        console.log(board);
-        //checkWinner(board[row][column]);
+
         checkWinner(activeTurnPlayer);
         switchActiveTurnPlayer();
-        //console.log(activeTurnPlayer);
-        //output.style.Image = playerTwo;
     }  
 }
-//Check button state, if visibility hidden is true, check 
 
+//Check button state, if visibility hidden is true, check 
+//let i = 0, while i is LESS than winConditions.length (1) do -> let j = 0 while J is less than winConditions[i].length (0)
+//set row = winCondtions[first array layer][second array layer][position]
+//set column = winconditions[first array layer][second array][position]
+//then, if board row column == 1 increase p1 score 1
+//check for winner (score = 3), alert, else loop again
 function checkWinner(row, column) {
-    //console.log("check winner");
     console.log(board[row][column]);
-    if(winConditions[row][column] == 1) {
-        p1_Score += 1;
-        console.log(p1_Score);
-    }
-    if(winConditions[row][column] == 2) {
-        p2_Score += 1;
-    }
-    if(p1_Score == 3) {
-        alert('Sonic Wins!');
-    }
-    if(p2_Score == 3) {
-        alert('Shadow Wins!');
+    for (let i = 0; i < winConditions.length; i++) {
+        for(let j = 0; j < winConditions[i].length; j++) {
+            row = winConditions[i][j][0];
+            column = winConditions[i][j][1]
+
+            if (board[row][column] == 1) {
+                p1_Score += 1;
+            }
+            if (board[row][column] == 2) {
+                p2_Score += 1;
+            }
+            if(p1_Score == 3) {
+                alert('Sonic Wins!');
+            }
+            if(p2_Score == 3) {
+                alert('Shadow Wins!');
+            }
+        }
+        p1_Score = 0;
+        p2_Score = 0;
+        //alert draws somehow
     }
 }
