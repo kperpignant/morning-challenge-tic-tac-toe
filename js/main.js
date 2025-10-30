@@ -62,10 +62,13 @@ document.getElementById('resetButton').addEventListener('click', () => {
 })
 
 //get Turn player and start game
+//need to add extra checks to this
 document.getElementById('startButton').addEventListener('click', () => {
-    gameStart = true;
-    activeTurnPlayer = 1;
-    getActiveTurnPlayer(activeTurnPlayer);
+    if(!gameStart) {
+        gameStart = true;
+        activeTurnPlayer = 1;
+        getActiveTurnPlayer(activeTurnPlayer);
+    }
 });
 
 //turn handling
@@ -221,9 +224,11 @@ function checkWinner(row, column) {
             }
             if(p1_Score == 3) {
                 alert('Sonic Wins!');
+                gameStart = false;
             }
             if(p2_Score == 3) {
                 alert('Shadow Wins!');
+                gameStart = false;
             }
         }
         p1_Score = 0;
